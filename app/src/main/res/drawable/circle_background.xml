@@ -1,0 +1,5 @@
+<!-- circle_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#000" /> <!-- Remplacez la couleur par celle souhaitée -->
+    <corners android:radius="24dp" /> <!-- Réglez le rayon pour obtenir une forme plus arrondie si nécessaire -->
+</shape>

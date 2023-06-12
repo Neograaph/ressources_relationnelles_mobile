@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Cube</string>
+    <string name="Welcome">BIENVENUE\nSUR</string>
+    <string name="logo">Logo</string>
+    <string name="re">RE</string>
+    <string name="ssources">SSOURCES</string>
+    <string name="lationnelles">LATIONNELLES</string>
+    <string name="connexion">Connexion</string>
+    <string name="retour">Retour</string>
+    <string name="confirmer">Confirmer</string>
+    <string name="navbar">Navbar</string>
+    <string name="title_activity_test">Test</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+</resources>

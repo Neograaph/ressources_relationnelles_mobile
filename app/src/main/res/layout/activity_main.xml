@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#092A3F"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="168dp"
+        android:layout_marginTop="28dp"
+        android:src="@drawable/firefly"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/logo" />
+
+    <TextView
+        android:id="@+id/text_welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="28sp"
+        android:textColor="@color/white"
+        android:text="@string/Welcome"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="62dp"
+        app:layout_constraintTop_toBottomOf="@+id/logo"/>
+
+    <TextView
+        android:id="@+id/text_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="68sp"
+        android:textColor="@color/white"
+        android:text="RE"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="62dp"
+        app:layout_constraintTop_toBottomOf="@+id/text_welcome"/>
+
+    <TextView
+        android:id="@+id/logo_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:text="SSOURCES"
+        app:layout_constraintStart_toEndOf="@id/text_logo"
+        app:layout_constraintTop_toBottomOf="@+id/text_welcome"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:text="LATIONNELLES"
+        app:layout_constraintStart_toEndOf="@id/text_logo"
+        app:layout_constraintTop_toBottomOf="@+id/logo_1"/>
+
+    <Button
+        android:id="@+id/create_acc_but"
+        android:layout_width="346dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="52dp"
+        android:text="Créer un compte"
+        android:onClick="register"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_logo"
+        />
+
+    <Button
+        android:id="@+id/login_but"
+        android:layout_width="346dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="12dp"
+        android:text="Se connecter"
+        android:onClick="login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/create_acc_but"
+        />
+
+    <Button
+        android:id="@+id/goto_but"
+        android:layout_width="346dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="12dp"
+        android:text="Accéder au site"
+        android:onClick="goHome"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login_but"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

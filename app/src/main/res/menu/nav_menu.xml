@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item
+        android:id="@+id/login"
+        android:icon="@drawable/heart"
+        android:title="Se Connecter"
+        android:onClick="login"/>
+    <item
+        android:id="@+id/register"
+        android:icon="@drawable/heart"
+        android:title="Créer un compte"
+        android:onClick="register"/>
+    <item
+        android:id="@+id/rgpd"
+        android:icon="@drawable/heart"
+        android:title="Politique RGPD" />
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/heart"
+        android:title="Paramètre" />
+</menu>
