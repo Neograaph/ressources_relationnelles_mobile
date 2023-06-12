@@ -17,6 +17,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 public class Utils {
+
+    public boolean isConnected;
+    public String username;
+
     public void faireAppelGET(Context context,String action, VolleyCallback callback) {
         String url = "http://172.20.10.3:8000/api/ActionTypes?"+action;
 

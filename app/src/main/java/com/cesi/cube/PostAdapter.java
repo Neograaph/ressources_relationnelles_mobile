@@ -33,6 +33,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         Post post = postList.get(position);
         holder.usernameTextView.setText(post.getAuthor());
         holder.postContentTextView.setText(post.getContent());
+        holder.imageUrl = post.getImageURL();
+        if(holder.imageUrl == null) holder.imageView.setVisibility(View.GONE);
+        Picasso.get()
+                .load(holder.imageUrl)
+                .into(holder.imageView);
     }
 
     @Override
@@ -44,18 +49,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         public ImageView profileImageView;
         public TextView usernameTextView;
         public TextView postContentTextView;
+        public String imageUrl;
+        public ImageView imageView;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
             profileImageView = itemView.findViewById(R.id.profileImage);
             usernameTextView = itemView.findViewById(R.id.profileName);
             postContentTextView = itemView.findViewById(R.id.postContent);
-            ImageView imageView = itemView.findViewById(R.id.postImage);
-            String imageUrl = "https://latavernedutesteur.files.wordpress.com/2017/11/testss.png";
+            imageView = itemView.findViewById(R.id.postImage);
 
-            Picasso.get()
-                    .load(imageUrl)
-                    .into(imageView);
+
         }
     }
 }

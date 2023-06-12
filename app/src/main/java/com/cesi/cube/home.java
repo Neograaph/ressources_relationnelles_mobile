@@ -75,8 +75,10 @@ public class home extends AppCompatActivity {
 
         // Initialisez la liste de posts
         postList = new ArrayList<>();
-        postList.add(new Post("Utilisateur 1", "Contenu du post 1", ""));
-        postList.add(new Post("Utilisateur 2", "Contenu du post 2", ""));
+        postList.add(new Post("Utilisateur 1", "Contenu du post 1", "https://latavernedutesteur.files.wordpress.com/2017/11/testss.png"));
+        postList.add(new Post("Utilisateur 2", "Contenu du post 2", null));
+        postList.add(new Post("Utilisateur 2", "Contenu du post 3", "https://download.vikidia.org/vikidia/fr/images/thumb/9/95/Fr%C3%BChlingsallee_Tulpenbl%C3%BCte_2010.jpg/1200px-Fr%C3%BChlingsallee_Tulpenbl%C3%BCte_2010.jpg"));
+        postList.add(new Post("","",null));
         // Ajoutez d'autres posts à la liste
 
         // Configurez la RecyclerView
