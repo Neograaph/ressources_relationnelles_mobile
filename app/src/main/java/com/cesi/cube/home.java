@@ -8,7 +8,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +46,17 @@ public class home extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Objects.requireNonNull(getSupportActionBar()).hide();
-        setContentView(R.layout.activity_home);
+        Utils util = new Utils();
+        SharedPreferences preferences = getSharedPreferences("session", Context.MODE_PRIVATE);
+        long lastLoginTime = preferences.getLong("lastLoginTime", 0);
+        long currentTime = System.currentTimeMillis();
+        long sessionDuration = 7 * 24 * 60 * 60 * 1000; // 7 jours en millisecondes
+
+        if (currentTime - lastLoginTime > sessionDuration) {
+            setContentView(R.layout.activity_home);
+        } else {
+            setContentView(R.layout.activity_home_con);
+        }
 
         DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -99,6 +111,16 @@ public class home extends AppCompatActivity {
     public void register(MenuItem view)
     {
         Intent intent = new Intent(this, register.class);
+        startActivity(intent);
+    }
+
+    public void logout(MenuItem view)
+    {
+        SharedPreferences preferences = getSharedPreferences("session", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong("lastLoginTime", 0);
+        editor.apply();
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 

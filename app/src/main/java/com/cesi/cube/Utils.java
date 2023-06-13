@@ -1,7 +1,9 @@
 package com.cesi.cube;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.View;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -17,7 +19,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 public class Utils {
-
     public boolean isConnected;
     public String username;
 
@@ -37,6 +38,7 @@ public class Utils {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("$$$ CESI $$$", "error");
+                        callback.onError();
                         if (error instanceof NetworkError) {
                             Log.e("$$$ CESI $$$", "Erreur de réseau, par exemple pas de connexion Internet");
                             //
@@ -60,6 +62,14 @@ public class Utils {
                 });
 
         requestQueue.add(stringRequest);
+    }
+
+    public void changeConnectedState(boolean state){
+        this.isConnected = state;
+    }
+
+    public boolean getConnectionState(){
+        return this.isConnected;
     }
 
     public interface VolleyCallback {

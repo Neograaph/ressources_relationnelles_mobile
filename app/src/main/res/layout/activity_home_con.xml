@@ -62,7 +62,21 @@
         app:layout_constraintTop_toBottomOf="@id/navbar"
         android:orientation="horizontal">
 
+        <ImageView
+            android:layout_marginLeft="28dp"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dry_clean"/>
 
+        <EditText
+            android:layout_width="240dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/input2"
+            android:hint="Exprimez vous"
+            android:padding="10dp"
+            tools:ignore="Autofill" />
 
     </LinearLayout>
 
@@ -104,6 +118,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu"
+        app:menu="@menu/nav_menu_con"
         android:fitsSystemWindows="true"/>
 </androidx.drawerlayout.widget.DrawerLayout>
