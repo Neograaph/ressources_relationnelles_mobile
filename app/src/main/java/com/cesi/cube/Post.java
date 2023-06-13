@@ -3,10 +3,11 @@ package com.cesi.cube;
 import androidx.annotation.Nullable;
 
 public class Post {
-    public Post(String title, String content,@Nullable String imageUrl) {
+    public Post(String title, String content,@Nullable String imageUrl, String documentUrl) {
         this.title = title;
         this.content = content;
         this.imageURL = imageUrl;
+        this.documentUrl = documentUrl;
     }
 
     public String getTitle() {
@@ -46,6 +47,16 @@ public class Post {
     public String content;
     @Nullable
     public String imageURL = null;
+
+    public String getDocumentUrl() {
+        return documentUrl;
+    }
+
+    public void setDocumentUrl(String documentUrl) {
+        this.documentUrl = documentUrl;
+    }
+
+    public String documentUrl = null;
 
 
 }

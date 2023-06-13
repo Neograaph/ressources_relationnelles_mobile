@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
@@ -75,10 +76,10 @@ public class home extends AppCompatActivity {
 
         // Initialisez la liste de posts
         postList = new ArrayList<>();
-        postList.add(new Post("Utilisateur 1", "Contenu du post 1", "https://latavernedutesteur.files.wordpress.com/2017/11/testss.png"));
-        postList.add(new Post("Utilisateur 2", "Contenu du post 2", null));
-        postList.add(new Post("Utilisateur 2", "Contenu du post 3", "https://download.vikidia.org/vikidia/fr/images/thumb/9/95/Fr%C3%BChlingsallee_Tulpenbl%C3%BCte_2010.jpg/1200px-Fr%C3%BChlingsallee_Tulpenbl%C3%BCte_2010.jpg"));
-        postList.add(new Post("","",null));
+        postList.add(new Post("Utilisateur 1", "Contenu du post 1", "https://latavernedutesteur.files.wordpress.com/2017/11/testss.png", "https://docker-backend-nothing.jar"));
+        postList.add(new Post("Utilisateur 2", "Contenu du post 2", null, "https://docker-backend-zip.zip"));
+        postList.add(new Post("Utilisateur 2", "Contenu du post 3", "https://download.vikidia.org/vikidia/fr/images/thumb/9/95/Fr%C3%BChlingsallee_Tulpenbl%C3%BCte_2010.jpg/1200px-Fr%C3%BChlingsallee_Tulpenbl%C3%BCte_2010.jpg", null));
+        postList.add(new Post("","",null, null));
         // Ajoutez d'autres posts à la liste
 
         // Configurez la RecyclerView
@@ -101,13 +102,11 @@ public class home extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onTemplateButtonClicked(View view) {
-        // Effacez le contenu actuel du conteneur de modèle
-        //templateContainer.removeAllViews();
-
-        // Inflatez le modèle XML et ajoutez-le au conteneur
-        View templateView = LayoutInflater.from(this).inflate(R.layout.feed_tp, null);
-        templateContainer.addView(templateView);
-
+    public void like(View view){
+        ImageView like = findViewById(R.id.likeButton);
+        if(like.getColorFilter() != null)
+            like.setColorFilter(null);
+        else
+            like.setColorFilter(getResources().getColor(R.color.red));
     }
 }
