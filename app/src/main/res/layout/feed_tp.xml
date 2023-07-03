@@ -27,6 +27,7 @@
             android:text="Nom de la personne"
             android:layout_gravity="center_vertical"
             android:textSize="16sp"
+            android:textStyle="bold"
             android:paddingStart="8dp" />
 
     </LinearLayout>
@@ -36,6 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Test photo placeholder"
+        android:padding="12sp"
         />
 
     <!-- Image -->
@@ -45,22 +47,44 @@
         android:layout_height="200dp"
         android:scaleType="centerCrop" />
 
-    <LinearLayout
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/layoutDoc"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="30dp"
         android:padding="8dp"
         android:layout_width="match_parent"
-        android:layout_height="68dp"
-        android:textAlignment="center"
-        android:background="@color/black">
-        <TextView
-            android:id="@+id/docName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nom du fichier ici"
-            android:textAlignment="center"
-            android:textColor="@color/white"/>
+        android:layout_height="match_parent">
+
+        <!-- Rectangle avec contour -->
+        <LinearLayout
+            android:id="@+id/rectangle"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/input3"
+            android:padding="8dp">
+
+            <!-- Image à l'intérieur du rectangle -->
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="76dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/pdf" />
+
+            <!-- Texte à l'intérieur du rectangle -->
+            <TextView
+                android:layout_marginLeft="12sp"
+                android:id="@+id/docName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Votre texte"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
+
 
     <!-- Bouton "Like" et bouton "Commentaire" avec la date -->
     <LinearLayout
@@ -71,7 +95,7 @@
         android:padding="8dp">
 
         <ImageButton
-            android:src="@drawable/heart"
+            android:src="@drawable/like"
             android:scaleType="fitCenter"
             android:background="@android:color/transparent"
             android:id="@+id/likeButton"
@@ -90,12 +114,12 @@
 
         <ImageButton
             android:id="@+id/commentButton"
-            android:layout_width="68dp"
-            android:layout_height="48dp"
+            android:layout_width="48dp"
+            android:layout_height="38dp"
             android:scaleType="fitCenter"
             android:text="Commentaire"
             android:background="@android:color/transparent"
-            android:src="@drawable/menu"
+            android:src="@drawable/comment"
             android:layout_marginStart="8dp" />
 
         <TextView

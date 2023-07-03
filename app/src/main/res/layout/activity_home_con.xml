@@ -63,12 +63,14 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:onClick="sendPost"
             android:layout_marginLeft="28dp"
             android:layout_width="48dp"
             android:layout_height="wrap_content"
             android:src="@drawable/dry_clean"/>
 
         <EditText
+            android:id="@+id/exprimezVous"
             android:layout_width="240dp"
             android:layout_height="48dp"
             android:layout_gravity="center"

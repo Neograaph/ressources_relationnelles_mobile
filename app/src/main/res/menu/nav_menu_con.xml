@@ -4,15 +4,16 @@
     tools:showIn="navigation_view">
     <item
         android:id="@+id/rgpd"
-        android:icon="@drawable/heart"
+        android:icon="@drawable/compte"
         android:title="Politique RGPD" />
     <item
         android:id="@+id/settings"
-        android:icon="@drawable/heart"
+        android:icon="@drawable/reglage"
         android:title="Paramètre" />
     <item
         android:id="@+id/disconnect"
-        android:icon="@drawable/heart"
+        android:icon="@drawable/logout"
         android:onClick="logout"
+        android:layout_gravity="bottom"
         android:title="Se déconnecter" />
 </menu>

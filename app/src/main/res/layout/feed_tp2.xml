@@ -1,0 +1,54 @@
+<!-- template.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="18dp"
+    android:orientation="vertical">
+
+    <!-- Image de profil ronde en haut à gauche avec le nom aligné -->
+
+    <!-- Image -->
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/layoutDoc"
+        android:layout_marginTop="5dp"
+        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Rectangle avec contour -->
+        <LinearLayout
+            android:id="@+id/rectangle"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/input3"
+            android:padding="1dp">
+
+            <!-- Image à l'intérieur du rectangle -->
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/user" />
+
+            <!-- Texte à l'intérieur du rectangle -->
+            <TextView
+                android:layout_marginLeft="12sp"
+                android:id="@+id/nameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Votre texte"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!-- Bouton "Like" et bouton "Commentaire" avec la date -->
+
+</LinearLayout>
