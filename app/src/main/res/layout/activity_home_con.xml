@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.drawerlayout.widget.DrawerLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,7 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".home"
     android:id="@+id/drawerLayout">
-<androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E1E8F2"
@@ -29,7 +30,8 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:src="@drawable/menu"
-            android:id="@+id/nav_toogle"/>
+            android:id="@+id/nav_toogle"
+            android:contentDescription="TODO" />
         <View android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
@@ -38,7 +40,8 @@
             android:layout_width="58dp"
             android:layout_height="58dp"
             android:layout_gravity="center"
-            android:src="@drawable/firefly"/>
+            android:src="@drawable/firefly"
+            android:contentDescription="TODO" />
         <View android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
@@ -48,7 +51,8 @@
             android:layout_height="48dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/search_interface_symbol"/>
+            android:src="@drawable/search_interface_symbol"
+            android:contentDescription="TODO" />
 
     </LinearLayout>
 
@@ -60,34 +64,105 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/navbar"
-        android:orientation="horizontal">
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
         <ImageView
             android:onClick="sendPost"
-            android:layout_marginLeft="28dp"
             android:layout_width="48dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/dry_clean"/>
-
-        <EditText
-            android:id="@+id/exprimezVous"
-            android:layout_width="240dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:background="@drawable/input2"
-            android:hint="Exprimez vous"
-            android:padding="10dp"
-            tools:ignore="Autofill" />
+            android:src="@drawable/dry_clean"
+            android:contentDescription="TODO" />
 
     </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/postRessource"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/topFeed"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:background="@color/white"
+            android:visibility="visible"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/titreRessource"
+                android:layout_width="240dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:background="@drawable/input2"
+                android:hint="Titre de la ressource"
+                android:padding="10dp"
+                android:onClick="sendPost"
+                tools:ignore="Autofill" />
+
+            <EditText
+                android:id="@+id/contentRessource"
+                android:layout_width="240dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:background="@drawable/input2"
+                android:layout_marginTop="20dp"
+                android:hint="Contenu de la ressource"
+                android:padding="10dp"
+                android:onClick="sendPost"
+                tools:ignore="Autofill" />
+
+            <Spinner
+                android:id="@+id/category"
+                android:layout_width="240dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="20dp"
+                android:padding="10dp"
+                android:background="@drawable/input2"
+                android:hint="Exprimez vous"
+                tools:ignore="Autofill" />
+            <Spinner
+                android:id="@+id/typeRessource"
+                android:layout_width="240dp"
+                android:layout_height="48dp"
+                android:visibility="gone"
+                android:padding="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/input2"
+                android:hint="Exprimez vous"
+                tools:ignore="Autofill" />
+            <Button
+                android:id="@+id/btnAjouterDocument"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ajouter un document"
+                android:visibility="gone"
+                android:layout_marginTop="10dp" />
+            <Button
+                android:id="@+id/btnAjouterImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="Ajouter une image"
+                android:layout_marginTop="10dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="PostRessource"
+                android:text="Envoyer"/>
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/topFeed"
+            app:layout_constraintTop_toBottomOf="@id/postRessource"
             android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView

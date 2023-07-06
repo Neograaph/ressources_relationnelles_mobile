@@ -5,6 +5,7 @@
     <item
         android:id="@+id/rgpd"
         android:icon="@drawable/compte"
+        android:onClick="showRGPD"
         android:title="Politique RGPD" />
     <item
         android:id="@+id/settings"

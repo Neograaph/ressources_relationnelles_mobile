@@ -37,6 +37,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.imageUrl = post.getImageURL();
         holder.layoutUrl = post.getDocumentUrl();
         holder.titleTextView.setText(post.getTitle());
+        holder.authorTextView.setText(post.getAuthor());
+        holder.dateTextView.setText(post.getDate());
         if(holder.imageUrl == null) holder.imageView.setVisibility(View.GONE);
         if(holder.layoutUrl == null) holder.layoutDoc.setVisibility(View.GONE);
         holder.docName.setText(post.getDocumentUrl());
@@ -51,6 +53,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     public class PostViewHolder extends RecyclerView.ViewHolder {
+        public TextView authorTextView;
+        public TextView dateTextView;
         public ImageView profileImageView;
         public TextView usernameTextView;
         public TextView titleTextView;
@@ -69,6 +73,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             imageView = itemView.findViewById(R.id.postImage);
             layoutDoc = itemView.findViewById(R.id.layoutDoc);
             docName = itemView.findViewById(R.id.docName);
+            dateTextView = itemView.findViewById(R.id.postDate);
+            authorTextView = itemView.findViewById(R.id.author);
 
         }
     }

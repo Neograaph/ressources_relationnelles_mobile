@@ -5,10 +5,11 @@ import static androidx.core.content.ContextCompat.startActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-
+import okhttp3.*;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -19,8 +20,12 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +50,7 @@ public class Utils {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("$$$ CESI $$$", "error");
-                        callback.onError();
+                        callback.onError("error");
                         if (error instanceof NetworkError) {
                             Log.e("$$$ CESI $$$", "Erreur de réseau, par exemple pas de connexion Internet");
                             //
@@ -71,6 +76,34 @@ public class Utils {
         requestQueue.add(stringRequest);
     }
 
+    public void POST(Context context,String action, Map<String, String> params, VolleyCallback callback) {
+        String url = "http://cube-cesi.ddns.net:7032/api/" + action;
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e("$$$ CESI $$$", response.toString());
+                        callback.onSuccess(response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String errorResponse = "";
+                        if (error.networkResponse != null && error.networkResponse.data != null) {
+                            errorResponse = new String(error.networkResponse.data);
+                        }
+                        Log.e("Erreur 400", errorResponse);
+                        callback.onError(errorResponse);
+                    }
+                });
+
+        requestQueue.add(jsonRequest);
+
+    }
+
     public void faireAppelPOST(Context context,String action, Map<String, String> params, VolleyCallback callback) {
         String url = "http://cube-cesi.ddns.net:7032/api/"+action;
 
@@ -87,7 +120,7 @@ public class Utils {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("$$$ CESI $$$", "error");
-                        callback.onError();
+                        callback.onError("error");
                         if (error instanceof NetworkError) {
                             Log.e("$$$ CESI $$$", "Erreur de réseau, par exemple pas de connexion Internet");
                             //
@@ -114,7 +147,6 @@ public class Utils {
                 return params;
             }
         };
-
         requestQueue.add(stringRequest);
     }
 
@@ -130,7 +162,7 @@ public class Utils {
 
     public interface VolleyCallback {
         void onSuccess(String response);
-        void onError();
+        void onError(String response);
     }
 
 

@@ -3,13 +3,24 @@ package com.cesi.cube;
 import androidx.annotation.Nullable;
 
 public class Post {
-    public Post(String title, String content,@Nullable String imageUrl, String documentUrl) {
+    public Post(String title, String content,@Nullable String imageUrl, String documentUrl,String author, String date) {
         this.title = title;
         this.content = content;
         this.imageURL = imageUrl;
         this.documentUrl = documentUrl;
+        this.author = author;
+        this.date = date;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String date;
     public String getTitle() {
         return title;
     }

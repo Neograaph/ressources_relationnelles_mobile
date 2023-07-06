@@ -4,12 +4,15 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,10 +21,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import com.cesi.cube.fragment.RGPD;
 import com.google.android.material.navigation.NavigationView;
 
 
@@ -38,9 +48,16 @@ import java.util.Map;
 import java.util.Objects;
 
 public class home extends AppCompatActivity {
+    private static final int REQUEST_CODE_IMAGE = 0;
+    private static final int REQUEST_CODE_DOCUMENT = 2;
+    private RGPD rgpdFragment; // Fragment RGPD
     ActionBarDrawerToggle toggle; // Variable pour la gestion de la barre d'action
     private List<Post> postList; // Liste des posts
     private PostAdapter postAdapter; // Adaptateur pour les posts
+    RecyclerView postRecyclerView; // RecyclerView pour les posts
+
+    Uri imageUri; // Uri de l'image
+    Uri documentUri; // Uri du document
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +67,7 @@ public class home extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("session", Context.MODE_PRIVATE); // Récupération des préférences partagées pour la session
         long lastLoginTime = preferences.getLong("lastLoginTime", 0); // Récupération du dernier temps de connexion
         long currentTime = System.currentTimeMillis(); // Temps actuel en millisecondes
-        long sessionDuration = 7 * 24 * 60 * 60 * 1000; // Durée de session de 7 jours en millisecondes
-
+        long sessionDuration = 14 * 24 * 60 * 60 * 1000; // Durée de session de 7 jours en millisecondes
         // Vérification de la durée de la session
         if (currentTime - lastLoginTime > sessionDuration) {
             setContentView(R.layout.activity_home); // Affichage de l'activité home
@@ -74,14 +90,9 @@ public class home extends AppCompatActivity {
             }
         });
 
-        RecyclerView postRecyclerView = findViewById(R.id.postRecyclerView); // Récupération de la RecyclerView pour les posts
-
         // Initialisation de la liste des posts
         postList = new ArrayList<>();
-        postList.add(new Post("Utilisateur 1", "Contenu du post 1", "https://latavernedutesteur.files.wordpress.com/2017/11/testss.png", "Contrat de chantier"));
-        postList.add(new Post("Utilisateur 2", "Contenu du post 2", null, "Documentation RE"));
-        postList.add(new Post("Utilisateur 2", "Contenu du post 3", "https://download.vikidia.org/vikidia/fr/images/thumb/9/95/Fr%C3%BChlingsallee_Tulpenbl%C3%BCte_2010.jpg/1200px-Fr%C3%BChlingsallee_Tulpenbl%C3%BCte_2010.jpg", null));
-        // Ajoutez d'autres posts à la liste
+         // Ajoutez d'autres posts à la liste
         Utils utils = new Utils();
         utils.faireAppelGET(this, "Ressources", new Utils.VolleyCallback() {
             @Override
@@ -102,35 +113,116 @@ public class home extends AppCompatActivity {
                         // Récupérez les valeurs spécifiques de la ressource
                         String titre = ressourceObject.getString("titre");
                         String contenu = ressourceObject.getString("contenu");
+                        String dateCreation = ressourceObject.getString("dateCreation");
+                        String imageUrl = null;
                         String documentUrl = null;
+
+                        JSONObject utilisateurObject = ressourceObject.getJSONObject("utilisateur");
+                        String author = utilisateurObject.getString("nom") + " " + utilisateurObject.getString("prenom");
 
                         if (!ressourceObject.isNull("documentId")) {
                             JSONObject documentObject = ressourceObject.getJSONObject("document");
-                            documentUrl = "http://cube-cesi.ddns.net:4200/assets/documents/" + documentObject.getString("chemin");
+                            Log.d("extension", documentObject.getString("extension"));
+                            if(documentObject.getString("extension").equals(".pdf")) {
+                                documentUrl = "http://cube-cesi.ddns.net:4200/assets/documents/" + documentObject.getString("chemin");
+                            } else {
+                                imageUrl = "http://cube-cesi.ddns.net:4200/assets/documents/" + documentObject.getString("chemin");
+                            }
                         }
 
-                        postList.add(new Post(titre, contenu, documentUrl, null));
+                        postList.add(new Post(titre, contenu, imageUrl, documentUrl, author, dateCreation));
                     } catch (JSONException e) {
                         e.printStackTrace();
                         // Gérez les erreurs liées à la récupération des valeurs de la ressource
                     }
                 }
 
+                // Configuration de la RecyclerView
+                postRecyclerView = findViewById(R.id.postRecyclerView);
+                postAdapter = new PostAdapter(postList);
+                postRecyclerView.setAdapter(postAdapter);
+                postRecyclerView.setLayoutManager(new LinearLayoutManager(home.this));
+
+                // Notifier les changements de données à l'adaptateur
+                postAdapter.notifyDataSetChanged();
+
 
             }
 
             @Override
-            public void onError() {
+            public void onError(String response) {
                 Toast.makeText(home.this, "Pas d'accès BDD", Toast.LENGTH_SHORT).show();
             }
         });
 
+        // Initialisation des spinner uniquement si connecté
+        if (currentTime - lastLoginTime < sessionDuration) {
+            Spinner categorySpinner = findViewById(R.id.category);
+            String[] options = {"Communication", "Cultures", "Développement personnel", "Intelligence émotionnelle", "Loisirs", "Monde professionnel", "Parentalité", "Qualité de vie", "Recherche de sens", "Santé physique", "Santé psychique", "Spiritualité", "Vie affective"}; // Remplacez par vos options réelles
 
-        // Configuration de la RecyclerView
-        postRecyclerView = findViewById(R.id.postRecyclerView);
-        postAdapter = new PostAdapter(postList);
-        postRecyclerView.setAdapter(postAdapter);
-        postRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            categorySpinner.setAdapter(adapter);
+
+            Spinner typeSpinner = findViewById(R.id.typeRessource);
+            String[] options2 = {"Activité / Jeu à réaliser", "Article", "Carte défi", "Cours au format PDF", "Exercice / Atelier", "Fiche de lecture", "Jeu en ligne", "Vidéo"}; // Remplacez par vos options réelles
+
+            ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options2);
+            adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            typeSpinner.setAdapter(adapter2);
+
+
+            Button btnAjouterImage = findViewById(R.id.btnAjouterImage);
+            btnAjouterImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Code pour la sélection d'image
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    startActivityForResult(intent, REQUEST_CODE_IMAGE);
+                }
+            });
+
+            Button btnAjouterDoc = findViewById(R.id.btnAjouterDocument);
+            btnAjouterDoc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Code pour la sélection d'image
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("*/*");
+                    startActivityForResult(intent, REQUEST_CODE_DOCUMENT);
+                }
+            });
+        }
+
+
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_IMAGE && resultCode == RESULT_OK && data != null) {
+            // Récupérer l'image sélectionnée
+            imageUri = data.getData();
+            // Faire quelque chose avec l'image sélectionnée (par exemple, l'envoyer dans le post)
+        }
+        if (requestCode == REQUEST_CODE_DOCUMENT && resultCode == RESULT_OK && data != null) {
+            // Récupérer l'image sélectionnée
+            documentUri = data.getData();
+            // Faire quelque chose avec l'image sélectionnée (par exemple, l'envoyer dans le post)
+        }
+    }
+
+
+    public void showRGPD(MenuItem view) {
+        String url = "http://cube-cesi.ddns.net:4200/mentionsLegales";
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
     }
 
     // Méthode pour gérer la connexion
@@ -190,34 +282,44 @@ public class home extends AppCompatActivity {
     }
 
 
-    public void PostRessource(){
+    public void PostRessource(View view){
         Utils utils = new Utils();
         Map<String, String> params = new HashMap<String, String>();
-        String titre = "Test";
-        String content = "Test";
+        String titre = findViewById(R.id.titreRessource).toString();
+        String content = findViewById(R.id.contentRessource).toString();
+        String category = findViewById(R.id.category).toString();
+        String typeRessource = findViewById(R.id.typeRessource).toString();
         params.put("titre", titre);
         params.put("contenu", content);
         params.put("utilisateurId", "1");
-        params.put("categorieId", "test");
+        params.put("categorieId", category);
         params.put("visibiliteId", "Public");
+        params.put("ressource",null);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             params.put("dateCreation", Date.from(Instant.now()).toString());
         }
         params.put("valider", "true");
-        utils.faireAppelPOST(this, "Ressources", params, new Utils.VolleyCallback() {
+        utils.POST(this, "Ressources", params, new Utils.VolleyCallback() {
             @Override
             public void onSuccess(String response) {
                 Toast.makeText(home.this, "Ressource ajoutée", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onError() {
-
+            public void onError(String response) {
+                Toast.makeText(home.this, response, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+
+
     public void sendPost(View view) {
-        PostRessource();
+        LinearLayout postRessource = findViewById(R.id.postRessource);
+        if (postRessource.getVisibility() == View.GONE) {
+            postRessource.setVisibility(View.VISIBLE);
+        } else {
+            postRessource.setVisibility(View.GONE);
+        }
     }
 }

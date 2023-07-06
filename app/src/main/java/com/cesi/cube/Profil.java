@@ -22,9 +22,16 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 
 public class Profil extends AppCompatActivity {
     ActionBarDrawerToggle toggle;
@@ -58,29 +65,38 @@ public class Profil extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         TextView txtUsername = findViewById(R.id.txtUsername);
 
-        // Affichage du nom d'utilisateur récupéré depuis les préférences partagées
-        if (preferences.getString("username", "Utilisateur") != null)
-            txtUsername.setText(preferences.getString("username", "Utilisateur"));
-        else
-            txtUsername.setText("Admin");
+        // Récupérer la chaîne JSON à partir des préférences partagées
+        String savedJsonString = preferences.getString("token", "");
+        String encodedJwtToken = null;
+        try {
+            JSONObject jsonToken = new JSONObject(savedJsonString);
+            encodedJwtToken = jsonToken.getString("token");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d("cesi", "savedJsonString : " + encodedJwtToken);
+        try {
+            Claims claims = Jwts.parser().parseClaimsJwt(encodedJwtToken).getBody();
+
+            // Récupérez les claims (informations) du token décodé
+            String username = claims.getSubject();
+            Date expirationDate = claims.getExpiration();
+            String utilisateurId = claims.get("UtilisateurId", String.class);
+            txtUsername.setText(utilisateurId);
+
+            Log.d("cesi", "username : " + username);
+            Log.d("cesi", "expirationDate : " + expirationDate);
+            Log.d("cesi", "utilisateurId : " + utilisateurId);
+
+        } catch (Exception e) {
+            // Gérez les erreurs de décodage du token JWT
+            e.printStackTrace();
+        }
 
         // Initialisation de ActionBarDrawerToggle pour gérer l'ouverture/fermeture du tiroir de navigation
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
-        // Configuration de la navigationView pour écouter les clics sur les éléments du menu
-        navigationView.setNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.nav_home:
-                    Log.d("clicked home", "clicked home");
-                    break;
-                default:
-                    Log.d("TAGGED", String.valueOf(item.getItemId()));
-                    break;
-            }
-            return true;
-        });
 
         // Gestion du clic sur le bouton de bascule pour ouvrir/fermer le tiroir de navigation
         ImageView togglerButton = findViewById(R.id.nav_toogle);
@@ -105,9 +121,11 @@ public class Profil extends AppCompatActivity {
         // Configuration de la RecyclerView pour afficher les posts
         postRecyclerView = findViewById(R.id.postRecyclerView);
         postList = new ArrayList<>();
+        /*
         postList.add(new Post("Utilisateur 2", "Contenu du post 2", null, "https://docker-backend-zip.zip"));
         postList.add(new Post("Utilisateur 2", "Contenu du post 3", "https://download.vikidia.org/vikidia/fr/images/thumb/9/95/Fr%C3%BChlingsallee_Tulpenbl%C3%BCte_2010.jpg/1200px-Fr%C3%BChlingsallee_Tulpenbl%C3%BCte_2010.jpg", null));
         postList.add(new Post("", "", null, null));
+        */
         postAdapter = new PostAdapter(postList);
         postRecyclerView.setAdapter(postAdapter);
         postRecyclerView.setLayoutManager(new LinearLayoutManager(this));

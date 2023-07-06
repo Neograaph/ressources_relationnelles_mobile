@@ -14,6 +14,8 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -39,9 +41,8 @@ public class login extends AppCompatActivity {
         Utils util = new Utils(); // Instance de l'utilitaire Utils
 
         Map<String, String> params = new HashMap<>(); // Création d'une carte pour stocker les paramètres de la requête POST
-        params.put("Email", input_identifiant.getText().toString()); // Ajout de l'identifiant saisi comme paramètre "Email"
-        params.put("MotDePasse", input_password.getText().toString()); // Ajout du mot de passe saisi comme paramètre "MotDePasse"
-        params.put("authenticate", "authenticate"); // Ajout du paramètre "authenticate" pour l'authentification
+        params.put("email", input_identifiant.getText().toString()); // Ajout de l'identifiant saisi comme paramètre "Email"
+        params.put("motDePasse", input_password.getText().toString()); // Ajout du mot de passe saisi comme paramètre "MotDePasse"
 
         // Vérification des saisies de l'utilisateur
         if (input_identifiant.getText().toString().equals("")) {
@@ -65,13 +66,16 @@ public class login extends AppCompatActivity {
         }
 
         // Appel de la méthode faireAppelPOST de l'utilitaire Utils pour effectuer une requête POST
-        util.faireAppelPOST(this, "Utilisateur", params, new Utils.VolleyCallback() {
+        util.POST(this, "Utilisateurs/authenticate", params, new Utils.VolleyCallback() {
             @Override
             public void onSuccess(String response) {
                 if (response.contains("token")) {
                     SharedPreferences preferences = getSharedPreferences("session", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putLong("lastLoginTime", System.currentTimeMillis());
+                    // Convertir l'objet JSON en une chaîne de caractères
+                    String jsonString = response.toString();
+                    editor.putString("token", jsonString);
                     editor.apply();
 
                     startActivity(intent);
@@ -82,8 +86,8 @@ public class login extends AppCompatActivity {
             }
 
             @Override
-            public void onError() {
-                Toast.makeText(login.this, "Utilisateur invalide", Toast.LENGTH_SHORT).show(); // Affichage d'un message d'erreur en cas d'utilisateur invalide
+            public void onError(String response) {
+                Toast.makeText(login.this, response, Toast.LENGTH_SHORT).show(); // Affichage d'un message d'erreur en cas d'utilisateur invalide
             }
         });
     }

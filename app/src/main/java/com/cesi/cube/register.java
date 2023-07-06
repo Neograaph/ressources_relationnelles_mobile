@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +27,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -53,6 +61,7 @@ public class register extends AppCompatActivity {
     // Méthode pour accéder à l'activité home
     public void goHome(View view) {
         Intent intent = new Intent(this, home.class);
+        Intent intentLogin = new Intent(this, login.class);
         Utils util = new Utils();
         Map<String, String> params = new HashMap<>();
         params.put("nom", input_identifiant.getText().toString()); // Récupération de l'identifiant saisi
@@ -60,7 +69,21 @@ public class register extends AppCompatActivity {
         params.put("email", input_mail.getText().toString()); // Récupération de l'identifiant saisi
         params.put("motDePasse", input_password.getText().toString()); // Récupération du mot de passe saisi
         params.put("telephone", "None"); // Récupération du mot de passe saisi
-        params.put("register", "register");
+
+
+
+// Obtenez la date actuelle
+        Date currentDate = new Date();
+
+// Définissez le format souhaité
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
+// Formatez la date actuelle selon le format spécifié
+        String formattedDate = dateFormat.format(currentDate);
+        params.put("dateNaissance", formattedDate); // Récupération du mot de passe saisi
+        Log.d("CESI", "Date : " + formattedDate);
+
+
 
         // Vérifications de validité des champs saisis
         if (input_identifiant.getText().toString().equals("")) {
@@ -71,19 +94,20 @@ public class register extends AppCompatActivity {
             Toast.makeText(this, "Veuillez saisir un mot de passe", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (input_password.getText().toString().length() < 8) {
-            Toast.makeText(this, "Le mot de passe doit contenir au moins 8 caractères", Toast.LENGTH_SHORT).show();
+        if (input_password.getText().toString().length() > 12) {
+            Toast.makeText(this, "Le mot de passe doit contenir moins de 12 caractères", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Appel à la méthode faireAppelPOST de la classe Utils pour effectuer une requête POST
-        util.faireAppelPOST(this,"Utilisateur", params, new Utils.VolleyCallback() {
+        util.POST(this,"Utilisateurs", params, new Utils.VolleyCallback() {
             @Override
             public void onSuccess(String response) {
                 if (response.contains("token")) {
                     SharedPreferences preferences = getSharedPreferences("session", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putLong("lastLoginTime", System.currentTimeMillis());
+                    editor.putLong("token", Long.parseLong(response));
                     editor.apply();
 
                     startActivity(intent);
@@ -94,8 +118,9 @@ public class register extends AppCompatActivity {
             }
 
             @Override
-            public void onError() {
-                Toast.makeText(register.this, "Utilisateur invalide", Toast.LENGTH_SHORT).show();
+            public void onError(String response) {
+                //Toast.makeText(register.this, response, Toast.LENGTH_SHORT).show();
+                startActivity(intentLogin);
             }
         });
     }
