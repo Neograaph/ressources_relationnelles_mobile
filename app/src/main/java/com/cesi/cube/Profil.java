@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -185,6 +186,14 @@ public class Profil extends AppCompatActivity {
     // Méthode pour accéder à l'activité home
     public void goHome(MenuItem view) {
         Intent intent = new Intent(this, home.class);
+        startActivity(intent);
+    }
+
+    public void showRGPD(MenuItem view) {
+        String url = "http://cube-cesi.ddns.net:4200/mentionsLegales";
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
         startActivity(intent);
     }
 
