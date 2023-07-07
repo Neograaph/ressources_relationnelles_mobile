@@ -107,7 +107,7 @@ public class register extends AppCompatActivity {
                     SharedPreferences preferences = getSharedPreferences("session", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putLong("lastLoginTime", System.currentTimeMillis());
-                    editor.putLong("token", Long.parseLong(response));
+                    //editor.putLong("token", Long.parseLong(response));
                     editor.apply();
 
                     startActivity(intent);
